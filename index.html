@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter_Memory_Game</title>
+</head>
+<body>
+    
+    <h1 class="main-title">Memory Game</h1>
+    <div class="scoreboard">
+        <div class="scoreboard-text">Time: <span id="timer">00:00</span></div>
+        <div class="scoreboard-text">Moves: <span id="moves">0</span></div>
+        <button onclick="startGame()" class="scoreboard-button">New Game</button>
+    </div>
+
+    <div id="game-board" class="game-board">
+        <!-- Cards will be  generated here -->
+    </div>
+
+    <div id="message-box" class="message-overlay">
+        <div class="message-box-inner">
+            <h2>Congratulations!</h2>
+            <p class="message-subtitle">You find every pair!</p>
+            <p class="message-score-text">Time: <span id="final-time" class="font-bold text-red-500"></span></p>
+            <p class="message-score-text">Number of trials: <span id="final-moves" class="font-bold text-red-500"></span></p>
+            <button onclick="startGame()" class="message-button">
+                Restart
+            </button>
+        </div>
+    </div>
+
+    
+
+
+</body>
+</html>
