@@ -23,6 +23,7 @@ const winterImage = [
     'korcsolya.jpg',
     'renszarvas.webp',
     'teli_fenyofa.jpg',
+    'https://placehold.co/120x120/a8dadc/1d3557?text=Kesztyu',
 ];
 
 // segedd funkcio a tomb osszekeveresere
@@ -70,4 +71,28 @@ function startGame() {
     gameBoard.innerHTML = '';
     //torli a felforsitott kartyakat
     flippedCards = []; 
+    matchedPairs = 0;
+    moves = 0;
+    isWaiting = false;
+    // Visszaállítja a várakozási állapotot
+    gameStarted = false;
+    // frissiti a probaalkozasok szamlalojat
+    movesDisplay.textContent = moves;
+    // uzenet doboz torlese
+    messageBox.style.display = 'none';
+
+    // kartayak elokeszitese
+    // vegigmegy az osszes kartyan 
+    flippedCards.forEach((imageUrl, index) => {
+        //latrehoz egy kontainer div elemet a 3d hatashoz
+        const cortainer = document.createElement('div');
+        // hazzadja a stilus osztalyt
+        container.classList.add('card-container');
+        // beallitja az adat indexet
+        container.dataset.index = index;
+        // esemenyfigyelo hozzaadasa a kattintashoz, atadva a kepet
+        container.addEventListener('click', () => flipCard(cortainer, imageUrl));
+
+        
+    })
 }
