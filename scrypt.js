@@ -83,7 +83,7 @@ function startGame() {
 
     // kartayak elokeszitese
     // vegigmegy az osszes kartyan 
-    flippedCards.forEach((imageUrl, index) => {
+    cards.forEach((imageUrl, index) => {
         //latrehoz egy kontainer div elemet a 3d hatashoz
         const cortainer = document.createElement('div');
         // hazzadja a stilus osztalyt
@@ -93,6 +93,18 @@ function startGame() {
         // esemenyfigyelo hozzaadasa a kattintashoz, atadva a kepet
         container.addEventListener('click', () => flipCard(cortainer, imageUrl));
 
-        
-    })
+        // html generalas: img tag hasznalata a kephez
+        container.innerHTML = `
+            <div class="card" id="card-${index}"
+                <div class="card-face card-back">MEMORY</div>
+                <div class="card-face card-front">
+                    <img src="${imageUrl}" alt="Card Image">
+                </div>
+            </div>
+        `;
+        // hozzaadja a kartya kontainert a jatek tablahoz
+        gameBoard.appendChild(container);
+    });
+    // elinditja az idozitot
+    startTimer();
 }
