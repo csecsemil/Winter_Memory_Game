@@ -108,3 +108,15 @@ function startGame() {
     // elinditja az idozitot
     startTimer();
 }
+
+// egy kartya felforditasa
+function flipCard(cardContainer, imageUrl) {
+    // ellenorzi hogy a jatek elindult-e, nem var-e, vagy mar felforditottak-e ket kartyat
+    if (!gameStarted || isWaiting || cardContainer.querySelactor('.card').classList.contains('flipped') || cardContainer.querySelactor('.card').classList.contains('matched')) {
+        // ha nem lehet felforditani, kilep a fuggvenybol
+        return;
+    }
+
+    // megkeresi a kartya elemet
+    
+}
