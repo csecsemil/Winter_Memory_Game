@@ -12,8 +12,10 @@ let card = []; // a kartyak tombje
 let flippedCards = []; // a megforditott kartyakat tarolja
 let matchedPairs = 0; // a talalatok szamlaloja
 let moves = 0; // a probaalkozasok szamlaloja
-let timer; // az idomero valtozoja
+let timer = 0; // az idomero valtozoja
+let timerInterval; // az időzítő intervallum változója
 let isWaiting = false; // jelzi hogy a jatek elkezdodott-e
+let gameStarted = false; // jelzi hogy a játék elindult-e
 
 const winterImage = [
     'fa_hoember.jpg',
@@ -40,11 +42,11 @@ function shuffleArray(array) {
 }
 
 // idoformazo  fugveny perc es masodperc megjelenitesere
-function formatTime(second) {
-    //iszanitjuk a perceket
+function formatTime(seconds) {
+    //kiszamitjuk a perceket
     const minutes = Math.floor(seconds / 60);
     //kiszámitja a fenmarado masodperceket 
-    const remainingSeconds = second % 60;
+    const remainingSeconds = seconds % 60;
     //visszateritjuk a formazott stringet (pl. 00:05), ket szamjegyre kiegeszitve
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 }
@@ -75,11 +77,15 @@ function startGame() {
     moves = 0;
     isWaiting = false;
     // Visszaállítja a várakozási állapotot
-    gameStarted = false;
+    gameStarted = true; // A játék most elindult!
     // frissiti a probaalkozasok szamlalojat
     movesDisplay.textContent = moves;
     // uzenet doboz torlese
     messageBox.style.display = 'none';
+
+    // Kártyák előkészítése - duplikáljuk és keverjük meg
+    card = [...winterImage, ...winterImage];
+    shuffleArray(card);
 
     // kartayak elokeszitese
     // vegigmegy az osszes kartyan 
@@ -96,7 +102,6 @@ function startGame() {
         // html generalas: img tag hasznalata a kephez
         container.innerHTML = `
             <div class="card" id="card-${index}">
-                <div class="card-face card-back">MEMORY</div>
                 <div class="card-face card-front">
                     <img src="${imageUrl}" alt="Card Image">
                 </div>
@@ -142,51 +147,50 @@ function flipCard(cardContainer, imageUrl) {
 function checkForMatch() {
     const [firstCard, secondCard] = flippedCards;
 
-    if (card1.imageUrl === card2.imageUrl) {
-                // Megtalált pár
-                // Hozzáadja a 'matched' osztályt, ami zöld kerettel jelzi a találatot
-                card1.element.classList.add('matched');
-                // A második kártyán is beállítja a találat jelzést
-                card2.element.classList.add('matched');
-                // Növeli a megtalált párok számát
-                matchedPairs++;
-                
-                // Ellenőrzi, hogy az összes párt megtaláltuk-e (8 pár)
-                if (matchedPairs === cards.length / 2) {
-                    // Ha igen, befejezi a játékot
-                    endGame();
-                }
-            } else {
-                // Nem egyezik, fordítsd vissza
-                // Eltávolítja a 'flipped' osztályt az első kártyáról (visszafordul)
-                card1.element.classList.remove('flipped');
-                // Eltávolítja a 'flipped' osztályt a második kártyáról (visszafordul)
-                card2.element.classList.remove('flipped');
-            }
-
-            // Törli a felfordított kártyák listáját a következő próbálkozáshoz
-            flippedCards = [];
-            // Visszaállítja a várakozási állapotot, lehetővé téve az újabb kattintásokat
-            isWaiting = false;
+    if (firstCard.imageUrl === secondCard.imageUrl) {
+        // Megtalált pár
+        // Hozzáadja a 'matched' osztályt, ami zöld kerettel jelzi a találatot
+        firstCard.element.classList.add('matched');
+        // A második kártyán is beállítja a találat jelzést
+        secondCard.element.classList.add('matched');
+        // Növeli a megtalált párok számát
+        matchedPairs++;
+        
+        // Ellenőrzi, hogy az összes párt megtaláltuk-e (8 pár)
+        if (matchedPairs === card.length / 2) {
+            // Ha igen, befejezi a játékot
+            endGame();
         }
+    } else {
+        // Nem egyezik, fordítsd vissza
+        // Eltávolítja a 'flipped' osztályt az első kártyáról (visszafordul)
+        firstCard.element.classList.remove('flipped');
+        // Eltávolítja a 'flipped' osztályt a második kártyáról (visszafordul)
+        secondCard.element.classList.remove('flipped');
+    }
 
-        // A játék befejezése (ha az összes párt megtaláltuk)
-        function endGame() {
-            // Megállítja az időzítőt
-            clearInterval(timerInterval);
-            // Beállítja a játékot befejezettre
-            gameStarted = false;
-            
-            // Üzenet megjelenítése
-            // Beállítja a végső időt a modális ablakban
-            document.getElementById('final-time').textContent = formatTime(timer);
-            // Beállítja a végső próbálkozások számát a modális ablakban
-            document.getElementById('final-moves').textContent = moves;
-            // Megjeleníti a modális ablakot
-            messageBox.style.display = 'flex';
-        }
+    // Törli a felfordított kártyák listáját a következő próbálkozáshoz
+    flippedCards = [];
+    // Visszaállítja a várakozási állapotot, lehetővé téve az újabb kattintásokat
+    isWaiting = false;
+}
 
-        // Indítás a betöltéskor
-        // Ez a sor gondoskodik róla, hogy a játék elinduljon, amint a weboldal (DOM) betöltődik
-        window.onload = startGame; 
+// A játék befejezése (ha az összes párt megtaláltuk)
+function endGame() {
+    // Megállítja az időzítőt
+    clearInterval(timerInterval);
+    // Beállítja a játékot befejezettre
+    gameStarted = false;
     
+    // Üzenet megjelenítése
+    // Beállítja a végső időt a modális ablakban
+    document.getElementById('final-time').textContent = formatTime(timer);
+    // Beállítja a végső próbálkozások számát a modális ablakban
+    document.getElementById('final-moves').textContent = moves;
+    // Megjeleníti a modális ablakot
+    messageBox.style.display = 'flex';
+}
+
+// Indítás a betöltéskor
+// Ez a sor gondoskodik róla, hogy a játék elinduljon, amint a weboldal (DOM) betöltődik
+window.onload = startGame;
