@@ -8,7 +8,7 @@ const movesDisplay = document.getElementById('moves');
 const messageBox = document.getElementById('message-box');
 
 // Jatek allapota--
-let card = []; // a jatektablan levo kartya  utvonalakat url tarolja
+let card = []; // a kartyak tombje
 let flippedCards = []; // a megforditott kartyakat tarolja
 let matchedPairs = 0; // a talalatok szamlaloja
 let moves = 0; // a probaalkozasok szamlaloja
@@ -83,19 +83,19 @@ function startGame() {
 
     // kartayak elokeszitese
     // vegigmegy az osszes kartyan 
-    cards.forEach((imageUrl, index) => {
+    card.forEach((imageUrl, index) => {
         //latrehoz egy kontainer div elemet a 3d hatashoz
-        const cortainer = document.createElement('div');
+        const container = document.createElement('div');
         // hazzadja a stilus osztalyt
         container.classList.add('card-container');
         // beallitja az adat indexet
         container.dataset.index = index;
         // esemenyfigyelo hozzaadasa a kattintashoz, atadva a kepet
-        container.addEventListener('click', () => flipCard(cortainer, imageUrl));
+        container.addEventListener('click', () => flipCard(container, imageUrl));
 
         // html generalas: img tag hasznalata a kephez
         container.innerHTML = `
-            <div class="card" id="card-${index}"
+            <div class="card" id="card-${index}">
                 <div class="card-face card-back">MEMORY</div>
                 <div class="card-face card-front">
                     <img src="${imageUrl}" alt="Card Image">
@@ -112,11 +112,81 @@ function startGame() {
 // egy kartya felforditasa
 function flipCard(cardContainer, imageUrl) {
     // ellenorzi hogy a jatek elindult-e, nem var-e, vagy mar felforditottak-e ket kartyat
-    if (!gameStarted || isWaiting || cardContainer.querySelactor('.card').classList.contains('flipped') || cardContainer.querySelactor('.card').classList.contains('matched')) {
+    if (!gameStarted || isWaiting || cardContainer.querySelector('.card').classList.contains('flipped') || cardContainer.querySelector('.card').classList.contains('matched')) {
         // ha nem lehet felforditani, kilep a fuggvenybol
         return;
     }
 
     // megkeresi a kartya elemet
-    
+    const cardElement = cardContainer.querySelector('.card');
+    // hozzaadja a flipped osztályt a 3d atforditashoz
+    cardElement.classList.add('flipped');
+    // Hozzaadja a kartyat a felforditott kartyak listajahoz
+    flippedCards.push({ element: cardElement, imageUrl:imageUrl, index: cardContainer.dataset.index });
+
+    // ket lap van felforditva?
+    if (flippedCards.length === 2) {
+        // noveli a probaalkozasok szamlalojat
+        moves++;
+        // frissiti a kijelzot
+        movesDisplay.textContent = moves;
+        // beallitja a varakozasi allapotot (megakadalyozza a tovabbi kattintasokat)
+        isWaiting = true;
+
+        // Vár 1 másodpercet az összehasonlítás előtt, majd futtatja a checkForMatch függvényt
+        setTimeout(checkForMatch, 1000);
+    }
 }
+
+// elenorzi hogy a ket felforditott kartya megegyezik-e
+function checkForMatch() {
+    const [firstCard, secondCard] = flippedCards;
+
+    if (card1.imageUrl === card2.imageUrl) {
+                // Megtalált pár
+                // Hozzáadja a 'matched' osztályt, ami zöld kerettel jelzi a találatot
+                card1.element.classList.add('matched');
+                // A második kártyán is beállítja a találat jelzést
+                card2.element.classList.add('matched');
+                // Növeli a megtalált párok számát
+                matchedPairs++;
+                
+                // Ellenőrzi, hogy az összes párt megtaláltuk-e (8 pár)
+                if (matchedPairs === cards.length / 2) {
+                    // Ha igen, befejezi a játékot
+                    endGame();
+                }
+            } else {
+                // Nem egyezik, fordítsd vissza
+                // Eltávolítja a 'flipped' osztályt az első kártyáról (visszafordul)
+                card1.element.classList.remove('flipped');
+                // Eltávolítja a 'flipped' osztályt a második kártyáról (visszafordul)
+                card2.element.classList.remove('flipped');
+            }
+
+            // Törli a felfordított kártyák listáját a következő próbálkozáshoz
+            flippedCards = [];
+            // Visszaállítja a várakozási állapotot, lehetővé téve az újabb kattintásokat
+            isWaiting = false;
+        }
+
+        // A játék befejezése (ha az összes párt megtaláltuk)
+        function endGame() {
+            // Megállítja az időzítőt
+            clearInterval(timerInterval);
+            // Beállítja a játékot befejezettre
+            gameStarted = false;
+            
+            // Üzenet megjelenítése
+            // Beállítja a végső időt a modális ablakban
+            document.getElementById('final-time').textContent = formatTime(timer);
+            // Beállítja a végső próbálkozások számát a modális ablakban
+            document.getElementById('final-moves').textContent = moves;
+            // Megjeleníti a modális ablakot
+            messageBox.style.display = 'flex';
+        }
+
+        // Indítás a betöltéskor
+        // Ez a sor gondoskodik róla, hogy a játék elinduljon, amint a weboldal (DOM) betöltődik
+        window.onload = startGame; 
+    

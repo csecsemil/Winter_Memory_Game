@@ -1,0 +1,38 @@
+:root {   /*  */
+            --frost-blue: #a8dadc;
+            --deep-blue: #1d3557;
+            --snow-white: #f1faee;
+}
+
+body {
+    font-family: 'Inner', sans-serif;
+    background-color: var(--deep-blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* fo jatek elemek */
+.main-title {
+    font-size: 2.25;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.scoreboard {
+    background-color: #2d3748;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 1rem;
+}
+
