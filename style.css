@@ -9,6 +9,7 @@
 }
 
 body {
+    scrollbar: none;
     font-family: 'Inner', sans-serif;
     background-color: var(--deep-blue);
     display: flex;
@@ -115,6 +116,7 @@ body {
 
 .scoreboard-button:hover {
     background-color: #2f855a;
+    transform: rotateY(-1px);
 }
 
 
@@ -126,6 +128,8 @@ body {
     gap: 10px;
     width: 100%;
     max-width: 500px;
+    padding: 15px;
+    border-radius: 12px;
     margin: 20px auto 0 auto;
     position: relative;
     z-index: 10;
@@ -134,6 +138,7 @@ body {
 .card-container {
     perspective: 1000px;
     height: 120px;
+    width: 100%;
 }
 
 .card {
@@ -190,6 +195,47 @@ body {
     box-shadow: 0 0 15px #4CAF50;
 }
 
+.bunus-message {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffd700;
+    color: var(--deep-blue);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.bonus-message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.bonus-move {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: rotateY(-50%, -50%);
+    background-color: #ffd700;
+    color: var(--deep-blue);
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    z-index: 200;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.bonus-move.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
 
 /* uzenetek stilusai */
 .message-overlay {
@@ -249,7 +295,18 @@ body {
     .card-container {
         height: 80px;
     }
+    .scoreboard {
+        width: 95%;
+        font-size: 0.9rem;
+    }
+    .card-back {
+        font-size: 2rem;
+    }
     .card-face {
         font-size: 2rem;
     }
+}
+
+strong {
+    color: #f34242;
 }

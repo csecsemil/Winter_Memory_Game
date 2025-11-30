@@ -107,6 +107,7 @@ function startGame() {
         // html generalas: img tag hasznalata a kephez
         container.innerHTML = `
             <div class="card" id="card-${index}">
+                <div class="card-face card-back">.</div>
                 <div class="card-face card-front">
                     <img src="${imageUrl}" alt="Card Image">
                 </div>
@@ -149,18 +150,19 @@ function flipCard(cardContainer, imageUrl) {
 
 //bonusz felugro uzenet mutatasa
 function showBonusPopup() {
-    showBonusPopup.style.display = 'block';
+    const bonusPopup = document.getElementById('bonus-move');
+    bonusPopup.style.display = 'block';
     // megjeleniti a bonusz uzenetet egy kis animacioval
     setTimeout(() => {
-        showBonusPopup.classList.add('show');
+        bonusPopup.classList.add('show');
     }, 10); // kis kesleltetes az animacio inditasahoz
 
     // eltunteti az uzenetet 1 masodperc mulva
     setTimeout(() => {
-        showBonusPopup.classList.remove('show');
+        bonusPopup.classList.remove('show');
         // elrejti az elemet animacio utan
         setTimeout(() => {
-            showBonusPopup.style.display = 'none';
+            bonusPopup.style.display = 'none';
         }, 300);
     }, 1000);
 }
@@ -168,9 +170,28 @@ function showBonusPopup() {
 // elenorzi hogy a ket felforditott kartya megegyezik-e
 function checkForMatch() {
     const [firstCard, secondCard] = flippedCards;
+    
+    // Kiszamitja az eltelt idot az elso kartya felforditasa ota
+    const currentTime = Date.now();
+    const timeElapsed = currentTime - lastFlipTimestamp;
+    let isBonusMatch = false;
 
     if (firstCard.imageUrl === secondCard.imageUrl) {
         // Megtalált pár
+
+        // bonusz ellenorzes: ha gyors volt a 2. forditas
+        if (timeElapsed <= BONUS_TIME_LIMIT) {
+            // bonusz, nem noveli a lepesszamot
+            showBonusPopup(); // megjeleniti a bonusz uzenetet
+            isBonusMatch = true;
+        }
+
+        // noveli a lepesszamot csak ha nem bonusz
+        if (!isBonusMatch) {
+            moves++;
+            movesDisplay.textContent = moves;
+        }
+
         // Hozzáadja a 'matched' osztályt, ami zöld kerettel jelzi a találatot
         firstCard.element.classList.add('matched');
         // A második kártyán is beállítja a találat jelzést
@@ -183,6 +204,7 @@ function checkForMatch() {
             // Ha igen, befejezi a játékot
             endGame();
         }
+
     } else {
         // Nem egyezik, fordítsd vissza
         // Eltávolítja a 'flipped' osztályt az első kártyáról (visszafordul)
@@ -194,7 +216,7 @@ function checkForMatch() {
     // Törli a felfordított kártyák listáját a következő próbálkozáshoz
     flippedCards = [];
     // Visszaállítja a várakozási állapotot, lehetővé téve az újabb kattintásokat
-    isWaiting = false;
+    isWaiting = false;// Feloldja a kattintás zárolását
 }
 
 // A játék befejezése (ha az összes párt megtaláltuk)
