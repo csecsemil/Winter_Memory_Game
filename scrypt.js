@@ -150,6 +150,19 @@ function flipCard(cardContainer, imageUrl) {
 //bonusz felugro uzenet mutatasa
 function showBonusPopup() {
     showBonusPopup.style.display = 'block';
+    // megjeleniti a bonusz uzenetet egy kis animacioval
+    setTimeout(() => {
+        showBonusPopup.classList.add('show');
+    }, 10); // kis kesleltetes az animacio inditasahoz
+
+    // eltunteti az uzenetet 1 masodperc mulva
+    setTimeout(() => {
+        showBonusPopup.classList.remove('show');
+        // elrejti az elemet animacio utan
+        setTimeout(() => {
+            showBonusPopup.style.display = 'none';
+        }, 300);
+    }, 1000);
 }
 
 // elenorzi hogy a ket felforditott kartya megegyezik-e
