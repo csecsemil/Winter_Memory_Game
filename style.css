@@ -1,7 +1,11 @@
 :root {   /*  */
-            --frost-blue: #a8dadc;
-            --deep-blue: #1d3557;
-            --snow-white: #f1faee;
+    --frost-blue: #a8dadc;
+    --deep-blue: #1d3557;
+    --snow-white: #f1faee;
+    /*sarki feny szinei*/
+    --aurora-green: rgba(69, 179, 157, 0.7); /* Enyhe zöld */
+    --aurora-purple: rgba(147, 112, 219, 0.5); /* Lila */
+    --aurora-blue: rgba(100, 149, 237, 0.6); /* Égkék */
 }
 
 body {
@@ -10,8 +14,29 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     min-height: 100vh;
     padding: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* sarki feny */
+/*feny mozgatasa*/
+@keyframes aurora-move {
+    0% {transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.9; }
+    50% {transform: scale(1.2) rotate(5deg) translate(10vw, -10vh); opacity: 0.7; }
+    100% {transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.9; }
+}
+
+
+
+
+
+.game-board {
+    background-color: rgb(68, 104, 224);
+    padding: 20px;
+    border-radius: 10px;
 }
 
 /* fo jatek elemek */
@@ -80,7 +105,7 @@ body {
     transform-style: preserve-3d;
     transition: transform 0.6s;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(10, 1, 1, 0.801);
 }
 
 .card.flipped {
@@ -116,7 +141,7 @@ body {
 
 .card-back {
     background-color: #d4d4e0;
-    color: #c5c5e2;
+    color: #0000d3;
     transform: rotateY(0deg);
     font-size: 1.5rem;
 }
@@ -128,4 +153,64 @@ body {
 
 
 /* uzenetek stilusai */
-message
+message-overlay {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+message-box-inner {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.message-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--deep-blue);
+    margin-bottom: 1rem;
+}
+
+.message-subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.message-score-text {
+    font-size: 1.125rem;
+    color: #4a5568;
+}
+
+.message-button {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--deep-blue);
+    color: white;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s; 
+}
+
+.message-button:hover {
+    background-color: #2c4365;
+}
+
+/* mobil optimalizalas */
+@media (max-width: 600px) {
+    .game-board {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+    .card-container {
+        height: 80px;
+    }
+    .card-face {
+        font-size: 2rem;
+    }
+}
