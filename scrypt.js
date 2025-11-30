@@ -202,10 +202,16 @@ function createSnowflakes() {
         
         // Véletlenszerű pozíció
         snowflake.style.left = Math.random() * 100 + '%';
+        //kezdo pozicio a kepernyo teteje felett
+        snowflake.style.top = '-10vh'; 
         // Véletlenszerű animáció időtartam (5-15 másodperc)
         snowflake.style.animationDuration = (Math.random() * 10 + 5) + 's';
         // Véletlenszerű késleltetés
         snowflake.style.animationDelay = Math.random() * 5 + 's';
+        // veletlenszeru meret
+        const size = Math.random() * 3 + 2;
+        snowflake.style.width = size + 'px';
+        snowflake.style.height = size + 'px';
         
         body.appendChild(snowflake);
     }
