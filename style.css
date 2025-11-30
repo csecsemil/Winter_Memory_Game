@@ -9,7 +9,6 @@
 }
 
 body {
-    scrollbar: none;
     font-family: 'Inner', sans-serif;
     background-color: var(--deep-blue);
     display: flex;
