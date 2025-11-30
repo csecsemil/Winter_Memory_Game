@@ -17,6 +17,11 @@ let timerInterval; // az időzítő intervallum változója
 let isWaiting = false; // jelzi hogy a jatek elkezdodott-e
 let gameStarted = false; // jelzi hogy a játék elindult-e
 
+// ido az utolso kartyaforditas ota
+let lastFlipTimestamp = 0;
+// bonusz idokorlat 1 masodperc
+const BONUS_TIME_LIMIT = 1000;
+
 const winterImage = [
     'fa_hoember.jpg',
     'forro-csoki-blog.jpg',
@@ -131,16 +136,20 @@ function flipCard(cardContainer, imageUrl) {
 
     // ket lap van felforditva?
     if (flippedCards.length === 2) {
-        // noveli a probaalkozasok szamlalojat
-        moves++;
-        // frissiti a kijelzot
-        movesDisplay.textContent = moves;
-        // beallitja a varakozasi allapotot (megakadalyozza a tovabbi kattintasokat)
-        isWaiting = true;
+        // A lepesszam novelese a checkForMatch-ben tortenik, a bonusz ellenorzes utan
+        isWaiting = true; //zarolja a kattintasoat
 
-        // Vár 1 másodpercet az összehasonlítás előtt, majd futtatja a checkForMatch függvényt
+        // ellenorzi a bonusz idokorlatozast
         setTimeout(checkForMatch, 1000);
+    } else if (flippedCards.length === 1) {
+        // ÚJ: Ha ez az ELSŐ kártya egy próbálkozáson belül, rögzítjük az időt
+        lastFlipTimestamp = Date.now();
     }
+}
+
+//bonusz felugro uzenet mutatasa
+function showBonusPopup() {
+    showBonusPopup.style.display = 'block';
 }
 
 // elenorzi hogy a ket felforditott kartya megegyezik-e
