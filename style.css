@@ -29,19 +29,48 @@ body {
     100% {transform: scale(1) rotate(0deg) translate(0, 0); opacity: 0.9; }
 }
 
+.aurora-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;/* A tartalom alatt legyen, a hópelyhek felett */
+
+    background: radial-gradient(circle at 50% 10%, var(--aurora-green) 0%, transparent 20%),
+                radial-gradient(circle at 70% 30%, var(--aurora-blue) 0%, transparent 50%),
+                radial-gradient(circle at 30% 50%, var(--aurora-purple) 0%, transparent 60%);
+    background-size: 200% 200%;
+    filter: blur(100px); /* Nagyon elmosott hatás a "fényességért" */
+
+    /* alkalmazza a lassu, végtelen animációt */
+    animaction: aurora-move 20s infinite alternate ease-in-out;
+}
+
+/* hopelyhek stilusai */
+@keyframes snowfall {
+    0% { transform: translateY(-10vh); opacity: 0.8; }
+    100% { transform: translateY(110vh); opacity: 0; }
+}
+
+.snowflake {
+    position: absolute;
+    width: 3px;
+}
+
 
 
 
 
 .game-board {
-    background-color: rgb(68, 104, 224);
+    background-color: rgba(68, 104, 224);
     padding: 20px;
     border-radius: 10px;
 }
 
 /* fo jatek elemek */
 .main-title {
-    font-size: 2.25;
+    font-size: 2.25rem;
     font-weight: 800;
     color: white;
     margin-bottom: 1rem;
