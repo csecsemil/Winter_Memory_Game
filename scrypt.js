@@ -191,6 +191,36 @@ function endGame() {
     messageBox.style.display = 'flex';
 }
 
+ // Hópelyhek generálása
+function createSnowflakes() {
+    const snowflakeCount = 50; // Hópelyhek száma
+    const body = document.body;
+    
+    for (let i = 0; i < snowflakeCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        
+        // Véletlenszerű pozíció
+        snowflake.style.left = Math.random() * 100 + '%';
+        // Véletlenszerű animáció időtartam (5-15 másodperc)
+        snowflake.style.animationDuration = (Math.random() * 10 + 5) + 's';
+        // Véletlenszerű késleltetés
+        snowflake.style.animationDelay = Math.random() * 5 + 's';
+        
+        body.appendChild(snowflake);
+    }
+}
+
+// Sarki fény háttér hozzáadása
+function createAuroraBackground() {
+    const aurora = document.createElement('div');
+    aurora.classList.add('aurora-background');
+    document.body.insertBefore(aurora, document.body.firstChild);
+}
+
 // Indítás a betöltéskor
-// Ez a sor gondoskodik róla, hogy a játék elinduljon, amint a weboldal (DOM) betöltődik
-window.onload = startGame;
+window.onload = function() {
+    createAuroraBackground();
+    createSnowflakes();
+    startGame();
+};
